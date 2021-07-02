@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rainfall Water Level Forecaster</title>
+
+     <!-- bs4 -->
+     <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- Popper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+<!-- link css files -->
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+
+<!-- favicon -->
+<link rel="shortcut icon" href="{{url_for('static',filename='images/favicon.ico')}}" type="image/x-icon">
+
+<!-- ripple effect  cdn-->
+
+<script src="http://www.jqueryscript.net/demo/jQuery-Plugin-For-Water-Ripple-Animation-ripples/js/jquery.ripples.js">
+</script>
+
+<!-- charjs cdn -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.4.0/dist/chart.min.js"></script>
+
+</head>
+<body class="ripple-effect">
+   <!-- navigation bar start-->
+
+   <nav class="navbar navbar-expand-md  navbar-dark">
+
+    <!-- Brand -->
+    <a class="navbar-brand font-weight-bold" href="/" >
+        <img class="rounded-circle" src="{{url_for('static',filename='images/favicon-16x16.png')}}" alt="Logo" style="width:40px;">
+        RWFS
+    </a>
+  
+    <!-- Toggler/collapsibe Button -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <!-- Navbar links -->
+    <div class="collapse navbar-collapse " id="collapsibleNavbar">
+      <ul class="navbar-nav ml-auto" id="nav-list">
+        <li class="nav-item">
+          <a class="nav-link font-weight-bold text-white" href="{{ url_for('rainfall') }}" >RAINFALL</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link font-weight-bold text-white" href="{{ url_for('reservoirs') }}" >RESERVOIRS</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link font-weight-bold text-white" href="{{ url_for('about') }}"  >ABOUT US</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+<!-- navigation bar end -->
+
+
+<!-- ripple effect start -->
+
+<script>
+      $(document).ready(function() {
+        $('.ripple-effect').ripples('show');
+        });
+</script>
+<!-- ripple effect end -->
+
+
+
+                        <!-- from to take input for rainfall prediction -->
+
+                          <div class="container text-center" style="min-height:90vh">
+
+                            <h3 class="text-warning">Forecast Rainfall Water Level</h3>
+
+                            <hr>
+                            <hr>
+
+                                <form method="POST" action="/forecast_rainfall">
+                                    <div class="form-group">
+                                      <label for="inputRainfall" class="text-white"><h4>Number of Days to forecast</h4></label>
+                                      <input name="rainfall_days" type="number" class="form-control" id="inputRainfall">
+                                    </div>
+                                    <button  type="submit" class="btn btn-success ">Forecast</button>
+                                  </form>
+                                  {% if (values) %}
+
+                                  <div class="container bg-white m-2">
+                                    <!-- showing a chart -->
+                                    <canvas id="rainfallChart" width="1000" height="250"></canvas>
+                                  </div>
+
+                                  {% endif %}
+
+                          </div>
+
+                        <!-- end of form  -->
+
+
+
+                            
+
+    <script>
+        var ctx = $('#rainfallChart');
+        var rainfallLineChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: {{ labels | safe }},
+                datasets: [
+                {
+                    label: 'Forecasted Rainfall Level (m)',
+                    data: {{ values | safe }},
+                    fill:true,
+                    borderColor: "rgb(75,192,192)",
+                    lineTension:0.1
+                }
+                ]
+            },
+            options:{
+              responsive: true
+            }
+        });
+    </script>
+
+</body>
+</html>

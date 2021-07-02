@@ -1,1 +1,1 @@
-# RealTime-Water-Forecasting-System
+# Realtime-Water-Forecasting-System
