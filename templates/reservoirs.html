@@ -89,13 +89,30 @@
         <h3 class="text-warning">Forecast Reservoirs Water Level</h3>
 
         <hr>
+
         <hr>
 
             <form method="POST"  action="/forecast_reservoir">
+
+              <div class="form-group">
+
+                <label for="targetReservoir" class="text-white"><h4>Reservoir Name</h4></label>
+                 <select class="form-control" name="target-reservoir" id="targetReservoir" required>
+                   <option value="">Select a reservoir</option>
+                  {%for i in reservoirs %}
+
+                  <option value="{{i}}">{{i}}</option>
+
+                  {%endfor%}
+                </select>
+
+              </div>
+
                 <div class="form-group">
                   <label for="inputReservoir" class="text-white"><h4>Number of Days to forecast</h4></label>
-                  <input name="reservoir_days" type="number" class="form-control" id="inputReservoir">
+                  <input name="reservoir_days" type="number" class="form-control" id="inputReservoir" required>
                 </div>
+
                 <button type="submit" class="btn btn-success ">Forecast</button>
               </form>
 
@@ -111,11 +128,6 @@
     <!-- end of form  -->
 
 
-    
-    
-
-    
-
     <script>
       var ctx = $('#reservoirChart');
       var reservoirLineChart = new Chart(ctx, {
@@ -124,7 +136,7 @@
               labels: {{ labels | safe }},
               datasets: [
               {
-                  label: 'Forecasted Water Level (m)',
+                  label: 'Forecasted Water Level (m) in reservoir {{ reservoir_name | safe }}',
                   data: {{ values | safe }},
                   fill:true,
                   borderColor: "rgb(75,192,192)",
